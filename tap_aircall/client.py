@@ -1,6 +1,5 @@
 """REST client handling, including aircallStream base class."""
 
- 
 import backoff
 
 from typing import Callable, Any, Generator
@@ -108,7 +107,7 @@ class aircallStream(RESTStream):
             if key in row and row.get(key):
                 row[key] = datetime.fromtimestamp(row.get(key))
         return row
-    
+
     #https://sdk.meltano.com/en/latest/code_samples.html#custom-backoff
     #FUJ-4120, introducing custom backoff for Aircall taps
     
@@ -116,3 +115,4 @@ class aircallStream(RESTStream):
     #Aircall allows 60 requests per minute, generating a wait time of 90 seconds to avoid error caused by RateLimit exception
     def backoff_wait_generator(max_time: int) -> Callable[..., Generator[int, Any, None]]:
         return backoff.constant(interval=90)
+    
