@@ -1,17 +1,21 @@
 """REST client handling, including aircallStream base class."""
 
+ 
+import backoff
+
+from typing import Callable, Any, Generator
 from pathlib import Path
 from typing import Any, Dict, Optional, Iterable
 from urllib.parse import urlparse, parse_qs
 
 import requests
 from datetime import datetime
+from singer_sdk.exceptions import RetriableAPIError
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
-
 
 class aircallStream(RESTStream):
     """aircall stream class."""
@@ -94,7 +98,6 @@ class aircallStream(RESTStream):
         # TODO: Parse response body and return a set of records.
 
         self.logger.info(f"meta: {list(extract_jsonpath('$.meta.[*]', input=response.json()))}")
-
         yield from extract_jsonpath(self.records_jsonpath, input=response.json())
 
     def post_process(self, row: dict, context: Optional[dict]) -> dict:
@@ -105,3 +108,11 @@ class aircallStream(RESTStream):
             if key in row and row.get(key):
                 row[key] = datetime.fromtimestamp(row.get(key))
         return row
+    
+    #https://sdk.meltano.com/en/latest/code_samples.html#custom-backoff
+    #FUJ-4120, introducing custom backoff for Aircall taps
+    
+    #https://developer.aircall.io/tutorials/logging-calls/#:~:text=Aircall%20Public%20API%20is%20rate,will%20be%20blocked%20by%20Aircall.
+    #Aircall allows 60 requests per minute, generating a wait time of 90 seconds to avoid error caused by RateLimit exception
+    def backoff_wait_generator(max_time: int) -> Callable[..., Generator[int, Any, None]]:
+        return backoff.constant(interval=90)
