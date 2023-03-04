@@ -1,5 +1,6 @@
 """REST client handling, including aircallStream base class."""
 
+import sys
 import backoff
 
 from typing import Callable, Any, Generator
@@ -116,3 +117,13 @@ class aircallStream(RESTStream):
     def backoff_wait_generator(max_time: int) -> Callable[..., Generator[int, Any, None]]:
         return backoff.constant(interval=90)
     
+    def validate_response(self, response: requests.Response) -> None:
+        try:
+            super().validate_response(response)
+        except RetriableAPIError as e:
+            #Capture other Retriable Errors
+            if e.response.status_code != 429:
+                self.logger.error(f"(accepted intermittent error) Non-Rate limit error: {e}")
+                sys.exit(1001)
+            else:
+                raise e
