@@ -34,6 +34,8 @@ class aircallStream(RESTStream):
 
     post_process_datetime_types: List[str] = []
 
+    add_record_metadata = True
+
     @property
     def authenticator(self) -> BasicAuthenticator:
         """Return a new authenticator object."""
