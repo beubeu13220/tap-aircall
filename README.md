@@ -160,7 +160,7 @@ Calls | started_at | [Call overview](https://developer.aircall.io/api-references
 Call | started_at | [Call overview](https://developer.aircall.io/api-references/#call) |
 Teams | None | [Teams overview](https://developer.aircall.io/api-references/#team-overview) | :heavy_check_mark:
 Team | None | [Teams overview](https://developer.aircall.io/api-references/#team-overview) |
-Numbers | None | [Number overview](https://developer.aircall.io/api-references/#number-overview) | :heavy_check_mark:
+Numbers | created_at | [Number overview](https://developer.aircall.io/api-references/#number-overview) | :heavy_check_mark:
 Number | None | [Number overview](https://developer.aircall.io/api-references/#number-overview) | :heavy_check_mark:
 Contacts | updated_at | [Contact overview](https://developer.aircall.io/api-references/#contact-overview) | :heavy_check_mark:
 Contact | None | [Contact overview](https://developer.aircall.io/api-references/#contact-overview) |

@@ -132,7 +132,7 @@ class NumbersStream(aircallStream):
     name = "numbers"
     path = "v1/numbers"
     primary_keys = ["id"]
-    # replication_key = "created_at"
+    replication_key = "created_at"
     schema = number_properties.to_dict()
     records_jsonpath = "$.numbers[*]"  # Or override `parse_response`.
 
