@@ -20,7 +20,8 @@ Setting | Required | Default | Description
 --- | --- | --- | --- 
 api_token | True | None | The token to authenticate against the API service
 api_id | True | None | The id to authenticate against the API service
-start_date | False | None | The earliest record date to sync in UTC Timezone
+start_date | True | None | The earliest record date to sync in UTC Timezone
+end_date | False | None | The lastest record date to sync in UTC Timezone
 stream_maps | False | None | Config object for stream maps capability. For more information check out [Stream Maps](https://sdk.meltano.com/en/latest/stream_maps.html)
 stream_map_config | False | None | User-defined config values to be used within map expressions
 flattening_max_depth | False | None | 'True' to enable schema flattening and automatically expand nested properties
@@ -146,7 +147,8 @@ develop your own taps and targets.
 ## Utilization 
 This tap can be used in three differents ways: 
   * Any configuration: fetch all available data for each enable stream
-  * `start_date`: fetch data since this date according to the the replication date key 
+  * `start_date`: fetch data since this date according to the replication date key 
+  * `end_date`: fetch data until this date according to the replication date key
   * `state`: fetch data since the last update bookmarks according to the replication date key
 
 Nevertheless, it is important to note that any update made to an element in Aircall will not be considered when retrieving data via `state`. This is because there is no replication key such as `updated_at`. In other words, if one wishes to be able to retrieve all data, including updates, it is necessary to run the tap on the entire dataset every time. The only stream for which there are no updates in the strictest sense (or at least no interesting updates to retrieve) is the *Call* stream. This stream also happens to be the one containing the most data by far.  

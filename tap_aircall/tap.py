@@ -56,6 +56,13 @@ class Tapaircall(Tap):
         th.Property(
             "start_date",
             th.DateTimeType,
+            # Avoid to use current time in from parameter
+            required=True,
+            description="The earliest record date to sync",
+        ),
+        th.Property(
+            "end_date",
+            th.DateTimeType,
             description="The earliest record date to sync",
         ),
     ).to_dict()

@@ -111,6 +111,13 @@ class aircallStream(RESTStream):
         else:
             # Unix Timestamp
             params["from"] = int(time.time())
+        
+        end_date: Optional[str] = self.config.get("end_date")
+
+        if end_date:
+            end_date_unix_time: int = int(datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S").timestamp())
+            params["to"] = end_date_unix_time
+
         return params
 
     def prepare_request_payload(
