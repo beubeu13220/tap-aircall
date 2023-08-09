@@ -1,12 +1,12 @@
 """REST client handling, including aircallStream base class."""
 
-import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generator, Iterable, List, Optional
+from typing import Any, Dict, Generator, Iterable, List, Optional, cast
 from urllib.parse import parse_qsl
 
 import backoff
+import pendulum
 import requests
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
@@ -108,14 +108,16 @@ class aircallStream(RESTStream):
             starting_unix_time = starting_time.timestamp()
             params["from"] = int(starting_unix_time)
             # params["after"]: int = int(starting_unix_time)
-        else:
-            # Unix Timestamp
-            params["from"] = int(time.time())
-        
+        # Disable default from parameters use start_date default value
+        # else:
+        #     # Unix Timestamp
+        #     params["from"] = int(time.time())
+
         end_date: Optional[str] = self.config.get("end_date")
 
         if end_date:
-            end_date_unix_time: int = int(datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S").timestamp())
+            end_date_datetime: datetime = cast(datetime, pendulum.parse(end_date))
+            end_date_unix_time: int = int(end_date_datetime.timestamp())
             params["to"] = end_date_unix_time
 
         return params

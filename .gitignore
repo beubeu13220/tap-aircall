@@ -137,4 +137,6 @@ dmypy.json
 
 # Pycharm
 .idea/
-samples/state.json
+
+samples/
+.secrets/
