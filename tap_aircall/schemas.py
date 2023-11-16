@@ -10,6 +10,8 @@ from singer_sdk.typing import (
     StringType,
 )
 
+from .typing import OptionalPropertiesList
+
 number_properties = PropertiesList(
     Property(
         "id",
@@ -222,7 +224,7 @@ availability_properties = PropertiesList(
 )
 
 # From https://developer.aircall.io/api-references/#team-overview
-teams_properties = PropertiesList(
+teams_properties = OptionalPropertiesList(
     Property(
         "id", IntegerType, required=True, description="Unique identifier for the Team."
     ),
